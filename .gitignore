@@ -2,3 +2,4 @@ venv
 pretrainedCNN3
 pretrainedGithubMane
 githubCopy
+.vscode/settings.json
