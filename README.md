@@ -3,7 +3,7 @@ Application for digit recognition using CNN model
 ## How to start project
 ### Navigate to the directory where you want to store the project and run the following command
 ```python
-git clone https://github.com/xretinx/IO-blizniaki
+git clone https://github.com/xretinx/CNN-Digit-Recognition
 ```
 ### Create and activate Virtual Environment
 ```python
