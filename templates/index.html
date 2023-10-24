@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Handwritten Digit Recognition</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+      }
+
+      #header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      #canvas-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #000;
+        width: 250px;
+        height: 250px;
+      }
+
+      #canvas {
+        cursor: crosshair;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        background-color: #333;
+        color: white;
+        cursor: pointer;
+        margin: 5px;
+      }
+
+      #result-container {
+        margin-top: 20px;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        background-color: #f5f5f5;
+        width: 300px;
+        text-align: center;
+      }
+
+      #predicted-digit {
+        font-size: 32px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="header">
+      <h1>Digit Recognition</h1>
+    </div>
+    <div id="canvas-container">
+      <canvas id="canvas" width="250" height="250"></canvas>
+    </div>
+    <div>
+      <button onclick="predictDigit()">Predict</button>
+      <button onclick="clearCanvas()">Clear</button>
+    </div>
+    <div id="result-container">
+      <div id="predicted-digit">Predicted Digit:</div>
+      <div id="confidence">Confidence:</div>
+    </div>
+
+    <script>
+      let canvas = document.querySelector("#canvas");
+      let context = canvas.getContext("2d");
+      let drawing = false;
+
+      // Set background to white color
+      context.fillStyle = "black";
+      context.fillRect(0, 0, canvas.width, canvas.height);
+
+      canvas.addEventListener("mousedown", function (event) {
+        drawing = true;
+        context.moveTo(
+          event.pageX - canvas.offsetLeft,
+          event.pageY - canvas.offsetTop
+        );
+        context.beginPath();
+        context.lineJoin = context.lineCap = "round";
+        context.lineWidth = 15; // Adjust the brush size
+        context.strokeStyle = "white"; // Brush color
+      });
+
+      canvas.addEventListener("mousemove", function (event) {
+        if (drawing) {
+          context.lineTo(
+            event.pageX - canvas.offsetLeft,
+            event.pageY - canvas.offsetTop
+          );
+          context.stroke();
+        }
+      });
+
+      canvas.addEventListener("mouseup", function (event) {
+        drawing = false;
+      });
+
+      function predictDigit() {
+        // Create a copy of the canvas before inverting the colors
+        let canvasCopy = document.createElement("canvas");
+        canvasCopy.width = canvas.width;
+        canvasCopy.height = canvas.height;
+        let contextCopy = canvasCopy.getContext("2d");
+        contextCopy.drawImage(canvas, 0, 0);
+
+        // Invert the colors of the drawn digit in the copy
+        let imageData = contextCopy.getImageData(
+          0,
+          0,
+          canvasCopy.width,
+          canvasCopy.height
+        );
+        let data = imageData.data;
+        for (let i = 0; i < data.length; i += 4) {
+          let average = (data[i] + data[i + 1] + data[i + 2]) / 3;
+          data[i] = average; // Red component
+          data[i + 1] = average; // Green component
+          data[i + 2] = average; // Blue component
+        }
+        contextCopy.putImageData(imageData, 0, 0);
+
+        // Use the copied canvas for prediction
+        let image = canvasCopy.toDataURL("image/png");
+        fetch("/", {
+          method: "POST",
+          body: new URLSearchParams({
+            image: image,
+          }),
+        })
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (data) {
+            let predictedDigit = document.querySelector("#predicted-digit");
+            let confidence = document.querySelector("#confidence");
+            predictedDigit.textContent = "Predicted Digit: " + data.prediction;
+            confidence.textContent = "Confidence: " + data.confidence;
+          });
+      }
+
+      function clearCanvas() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        // Set background to white color after clearing
+        context.fillStyle = "black";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+
+        let predictedDigit = document.getElementById("predicted-digit");
+        let confidence = document.getElementById("confidence");
+        predictedDigit.textContent = "Predicted Digit: ";
+        confidence.textContent = "Confidence: ";
+      }
+    </script>
+  </body>
+</html>
