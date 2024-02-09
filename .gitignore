@@ -1,7 +1,4 @@
-venv
-pretrainedCNN3
-pretrainedGithubMane
-githubCopy
+venv/
 .vscode
 __pycache__/
 *.py[cod]
