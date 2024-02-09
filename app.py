@@ -6,7 +6,7 @@ import io
 from PIL import Image
 
 app = Flask(__name__)
-model2 = tf.keras.models.load_model('pretrainedCNN2')
+model2 = tf.keras.models.load_model('cnnModel')
 # model3 = tf.keras.models.load_model('githubCopy')
 # model4 = tf.keras.models.load_model('pretrainedGithubMane')
 

@@ -3,3 +3,8 @@ pretrainedCNN3
 pretrainedGithubMane
 githubCopy
 .vscode
+__pycache__/
+*.py[cod]
+*.pyc
+*~
+*.swp

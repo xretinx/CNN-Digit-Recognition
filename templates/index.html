@@ -7,6 +7,9 @@
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
 
       #header {
@@ -21,10 +24,12 @@
         background-color: #000;
         width: 250px;
         height: 250px;
+        margin: 0 auto; /* Center horizontally */
       }
 
       #canvas {
         cursor: crosshair;
+        border: 1px solid black; /* Add a border to visualize the canvas */
       }
 
       button {
@@ -43,7 +48,7 @@
         border-radius: 5px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         background-color: #f5f5f5;
-        width: 300px;
+        width: 250px; /* Set width to match canvas */
         text-align: center;
       }
 
