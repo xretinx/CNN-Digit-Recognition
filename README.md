@@ -3,7 +3,7 @@ Application for digit recognition using CNN model
 
 
 ![ss](https://github.com/xretinx/CNN-Digit-Recognition/assets/79771143/404af77f-0841-4585-a60c-b9d3d5db116a)
-## How to start project
+## How to start the project
 ### Navigate to the directory where you want to store the project and run the following command
 ```python
 git clone https://github.com/xretinx/CNN-Digit-Recognition
